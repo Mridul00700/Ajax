@@ -45,9 +45,9 @@ const countriesContainer = document.querySelector('.countries');
 // getCountryData('germany');
 
 
-const renderCountry = (data) => {
+const renderCountry = (data, className = '') => {
   const html =
-    `<article class="country">
+    `<article class="country ${className}">
           <img class="country__img" src="${data.flag}" />
           <div class="country__data">
             <h3 class="country__name">${data.name}</h3>
@@ -93,7 +93,7 @@ const getCountryAndNeighbour = (country) => {
     request2.addEventListener('load', function () {
       // No longer array
       const data2 = JSON.parse(this.responseText);
-      renderCountry(data2);
+      renderCountry(data2, 'neighbour');
     });
   });
 }
