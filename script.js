@@ -85,11 +85,16 @@ const getCountryAndNeighbour = (country) => {
     if (!neighbour) return
 
     // Ajax call country 2
-    const request = new XMLHttpRequest();
-    request.open('GET', `https://restcountries.eu/rest/v2/name/${neighbour}`);
-    // asynchronusly --- load event is emitted.. 
-    request.send();
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+    // Asynchronusly --- load event is emitted.. 
+    request2.send();
 
+    request2.addEventListener('load', function () {
+      // No longer array
+      const data2 = JSON.parse(this.responseText);
+      renderCountry(data2);
+    });
   });
 }
 
