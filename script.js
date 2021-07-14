@@ -67,7 +67,7 @@ const getCountryAndNeighbour = (country) => {
 
   // Ajax call country 1
   const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+  request.open('GET', `https://restcountries.eu/rest/v2/name/${country}?fullText=true`);
   // asynchronusly --- load event is emitted.. 
   request.send();
   console.log(request.responseText);
@@ -98,4 +98,4 @@ const getCountryAndNeighbour = (country) => {
   });
 }
 
-getCountryAndNeighbour('portugal')
+getCountryAndNeighbour('usa');
