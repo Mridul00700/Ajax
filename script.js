@@ -7,21 +7,47 @@ const countriesContainer = document.querySelector('.countries');
 
 // Old school ways..
 
-const getCountryData = (country) => {
-    const request = new XMLHttpRequest();
+// const getCountryData = (country) => {
+//   const request = new XMLHttpRequest();
 
-    request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
-    // asynchronusly --- load event is emitted.. 
-    request.send();
-    console.log(request.responseText);
+//   request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+//   // asynchronusly --- load event is emitted.. 
+//   request.send();
+//   console.log(request.responseText);
 
-    request.addEventListener('load', function () {
+//   request.addEventListener('load', function () {
 
-        const [data] = JSON.parse(this.responseText);
-        console.log(data);
+//     const [data] = JSON.parse(this.responseText);
+//     console.log(data);
 
-        const html =
-            `<article class="country">
+//     const html =
+//       `<article class="country">
+//           <img class="country__img" src="${data.flag}" />
+//           <div class="country__data">
+//             <h3 class="country__name">${data.name}</h3>
+//             <h4 class="country__region">${data.region}</h4>
+//             <p class="country__row"><span>👫</span>${(+data.population / 1000000).toFixed(1)}M people</p>
+//             <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+//             <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+//           </div>
+//         </article>`
+
+//     countriesContainer.insertAdjacentHTML('beforeend', html);
+//     countriesContainer.style.opacity = 1;
+
+
+
+//   });
+// }
+
+// getCountryData('portugal');
+// getCountryData('russia');
+// getCountryData('germany');
+
+
+const renderCountry = (data) => {
+  const html =
+    `<article class="country">
           <img class="country__img" src="${data.flag}" />
           <div class="country__data">
             <h3 class="country__name">${data.name}</h3>
@@ -32,14 +58,39 @@ const getCountryData = (country) => {
           </div>
         </article>`
 
-        countriesContainer.insertAdjacentHTML('beforeend', html);
-        countriesContainer.style.opacity = 1;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
 
-
-
-    });
 }
 
-getCountryData('portugal');
-getCountryData('russia');
-getCountryData('germany');
+const getCountryAndNeighbour = (country) => {
+
+  // Ajax call country 1
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+  // asynchronusly --- load event is emitted.. 
+  request.send();
+  console.log(request.responseText);
+
+  request.addEventListener('load', function () {
+
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+    // render country 1
+    renderCountry(data);
+
+    // Get neighbour Country
+    const [neighbour] = data.borders;
+
+    if (!neighbour) return
+
+    // Ajax call country 2
+    const request = new XMLHttpRequest();
+    request.open('GET', `https://restcountries.eu/rest/v2/name/${neighbour}`);
+    // asynchronusly --- load event is emitted.. 
+    request.send();
+
+  });
+}
+
+getCountryAndNeighbour('portugal')
