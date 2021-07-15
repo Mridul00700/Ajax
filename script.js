@@ -21,9 +21,7 @@ const renderCountry = (data, className = '') => {
 
   countriesContainer.insertAdjacentHTML('beforeend', html);
   // countriesContainer.style.opacity = 1;
-
 }
-
 
 
 const renderError = function (msg) {
@@ -137,7 +135,13 @@ const renderError = function (msg) {
 
 const getCountryData = (country) => {
   // Country 1
-  fetch(`https://restcountries.eu/rest/v2/name/${country}?fullText=true`).then((response) => response.json()
+  fetch(`https://restcountries.eu/rest/v2/name/${country}?fullText=true`).then((response) => {
+    console.log(response);
+    if (!response.ok) {
+      throw new Error(`This ${country} country not avaliable in database`)
+    }
+    return response.json()
+  }
   ).then(data => {
     renderCountry(data[0])
     const neighbour = data[0].borders[0];
@@ -156,5 +160,5 @@ const getCountryData = (country) => {
 
 
 btn.addEventListener('click', function () {
-  getCountryData('wdwd');
+  getCountryData('gerwdmany');
 });
