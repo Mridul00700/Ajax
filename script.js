@@ -157,7 +157,7 @@ const getCountryData = (country) => {
       renderCountry(data[0])
       const neighbour = data[0].borders[0];
 
-      if (!neighbour) return;
+      if (!neighbour) throw new Error('No neighbour country');
 
       // Country 2 
       return getJson(`https://restcountries.eu/rest/v2/alpha/${neighbour}`, `country not avaliable in database`)
