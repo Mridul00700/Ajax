@@ -132,30 +132,50 @@ const renderError = function (msg) {
 //   });
 // }
 
+const getJson = function (url, errormessage = "Something went wrong") {
+  return fetch(url).then(response => {
+    if (!response.ok) {
+      throw new Error(`${errormessage} ${response.status}`)
+    }
+    return response.json()
+  });
+}
 
 const getCountryData = (country) => {
   // Country 1
-  fetch(`https://restcountries.eu/rest/v2/name/${country}?fullText=true`).then((response) => {
-    console.log(response);
-    if (!response.ok) {
-      throw new Error(`This ${country} country not avaliable in database`)
-    }
-    return response.json()
-  }
-  ).then(data => {
-    renderCountry(data[0])
-    const neighbour = data[0].borders[0];
 
-    if (!neighbour) return;
 
-    // Country 2 
-    return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
-  }).then(response => response.json()).then(data => renderCountry(data, 'neighbour')).catch(err => {
-    renderError(err.message)
-  }).finally(() => {
-    countriesContainer.style.opacity = 1;
-  })
-  // Finally is called always
+  getJson(`https://restcountries.eu/rest/v2/name/${country}?fullText=true`, ' country not avaliable in database')
+    // fetch(`https://restcountries.eu/rest/v2/name/${country}?fullText=true`).then((response) => {
+    //   console.log(response);
+    //   if (!response.ok) {
+    //     throw new Error(`This ${country} country not avaliable in database`)
+    //   }
+    //   return response.json()
+    // }
+    .then(data => {
+      renderCountry(data[0])
+      const neighbour = data[0].borders[0];
+
+      if (!neighbour) return;
+
+      // Country 2 
+      return getJson(`https://restcountries.eu/rest/v2/alpha/${neighbour}`, `country not avaliable in database`)
+        //   }')
+        //   fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+        // }).then(response => {
+        //   if (!response.ok) {
+        //     throw new Error(`This ${country} country not avaliable in database`)
+        //   }
+        //   return response.json()
+        // })
+        .then(data => renderCountry(data, 'neighbour')).catch(err => {
+          renderError(err.message)
+        }).finally(() => {
+          countriesContainer.style.opacity = 1;
+        })
+      // Finally is called always
+    })
 }
 
 
