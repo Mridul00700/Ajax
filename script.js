@@ -180,5 +180,20 @@ const getCountryData = (country) => {
 
 
 btn.addEventListener('click', function () {
-  getCountryData('gerwdmany');
+
+  const whereAmI = (lat, lng) => {
+    fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`).then(res => {
+      if (!res.ok) {
+        throw new Error(`Please try after sometime as you have exceeded the rate limit of geocoading ${res.status}`);
+      }
+      return res.json()
+    })
+      .then(data => {
+        console.log(data, `You are in ${data.city}, ${data.country}`);
+        getCountryData(data.country);
+      }).catch(err => console.log(err));
+  }
+
+  whereAmI(19.037, 72.873);
+
 });
